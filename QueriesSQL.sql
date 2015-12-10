@@ -32,23 +32,46 @@ AND r.ativo=1 ;
 
 c)
 
-SELECT userid, (COUNT(regid)/COUNT(DISTINCT pageid)) as MediaRegPag
-FROM reg_pag
-WHERE reg_pag.ativa=1
-AND (SELECT p.userid FROM pagina p WHERE p.ativa=1 AND p.pagecounter=reg_pag.pageid)
-AND (SELECT r.userid FROM registo r WHERE r.ativo=1 AND r.regcounter=reg_pag.regid)
-AND (SELECT tr.userid FROM tipo_registo tr WHERE tr.ativo=1 AND tr.typecnt=reg_pag.typeid)
-GROUP BY userid
-HAVING MediaRegPag >= ALL
-(
-SELECT (COUNT(regid)/COUNT(DISTINCT pageid))
-FROM reg_pag 
-WHERE reg_pag.ativa=1
-AND (SELECT p.userid FROM pagina p WHERE p.ativa=1 AND p.pagecounter=reg_pag.pageid)
-AND (SELECT r.userid FROM registo r WHERE r.ativo=1 AND r.regcounter=reg_pag.regid)
-AND (SELECT tr.userid FROM tipo_registo tr WHERE tr.ativo=1 AND tr.typecnt=reg_pag.typeid)
-GROUP BY userid
-);
+
+SELECT tabela2.userid,AVG(tabela2.NumReg) as MediaRegPag FROM (
+
+SELECT COUNT(tabela1.regid)as NumReg,p.userid,p.pagecounter
+FROM pagina p LEFT JOIN (
+
+SELECT rp.pageid,rp.regid,rp.userid
+FROM registo r,tipo_registo tr, reg_pag rp
+WHERE r.typecounter=tr.typecnt 
+AND r.ativo=1 AND tr.ativo=1 AND rp.ativa=1
+AND rp.regid=r.regcounter AND r.userid=tr.userid 
+AND tr.userid=rp.userid
+)AS tabela1
+
+ON p.pagecounter=tabela1.pageid AND p.userid=tabela1.userid
+WHERE p.ativa=1
+GROUP BY p.pagecounter
+)AS tabela2
+
+GROUP BY tabela2.userid
+HAVING AVG(tabela2.NumReg)=(SELECT MAX(avgTable) as maximo FROM (
+SELECT AVG(tabela2.NumReg) as avgTable,tabela2.userid 
+FROM (
+SELECT COUNT(tabela1.regid)as NumReg,p.userid,p.pagecounter
+FROM pagina p LEFT JOIN (
+SELECT rp.pageid,rp.regid,rp.userid
+FROM registo r,tipo_registo tr, reg_pag rp
+WHERE r.typecounter=tr.typecnt 
+AND r.ativo=1 AND tr.ativo=1 AND rp.ativa=1
+AND rp.regid=r.regcounter
+AND r.userid=tr.userid 
+AND tr.userid=rp.userid
+)as tabela1
+
+ON p.pagecounter=tabela1.pageid AND p.userid=tabela1.userid
+WHERE p.ativa=1
+GROUP BY p.pagecounter
+)as tabela2
+
+GROUP BY tabela2.userid) as tabela3);
 
 
 
