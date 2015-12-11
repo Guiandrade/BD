@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<!-- 
+	Requisita ao utilizador o nome da página a eliminar	
+-->
+<html>
+
+	<head>
+	<title>Projeto BD</title>
+	<meta charset="utf-8" />
+	</head>
+	
+	<form action="del_page.php" method="post">
+	 <input id="pass" type="hidden" name="userid" value=/>
+	 <p>Nome: <input type="text" name="page_name" /></p>
+	 <p><input type="submit" name="Submit"/></p>
+	</form>
+	
+	<a href="index.html">Retroceder</a>
+	
+</html>
+<script type="text/javascript">
+var scrt_var = location.search.substring(1).split("=") ;
+var user = scrt_var[1];
+document.getElementById("pass").value = user ;
+</script>
