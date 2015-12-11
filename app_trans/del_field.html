@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<!-- 
+	Pede o nome do tipo de registo a apagar
+-->
+<html>
+
+	<head>
+	<title>Projeto BD</title>
+	<meta charset="utf-8" />
+	</head>
+	
+	<form action="del_field.php" method="post">
+	 <input id="pass" type="hidden" name="userid" value=/>
+	 <p>Nome do campo: <input type="text" name="page_name" /></p>
+	 <p>Nome do tipo de registo: <input type="text" name="reg_name" /></p>
+	 <p><input type="submit" name="Submit"/></p>
+	</form>
+	
+	<A href="menu.html" onclick="location.href=this.href+'?key='+user;return false;">Retroceder</A>
+	
+</html>
+<script type="text/javascript">
+var scrt_var = location.search.substring(1).split("=") ;
+var user = scrt_var[1];
+document.getElementById("pass").value = user ;
+</script>
