@@ -55,7 +55,6 @@
 			$sql = "INSERT INTO pagina (userid, pagecounter, nome, idseq, ativa) VALUES ($user_id, $pagecounter, '$pagename',$seq_num, true)";
 			$connection->query($sql);
 
-    		$connection = null;	
 			echo("<p>Página criada com sucesso</p>\n");
 		}
 		else
@@ -64,6 +63,7 @@
 			$result = null ;	
 		}
 
+	$connection = null;	
 ?>
 
 </br>
