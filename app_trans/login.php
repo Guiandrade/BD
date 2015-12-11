@@ -23,6 +23,9 @@
 	try {
 	    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 	    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+		# Inicia a transação
+		$conn->beginTransaction();
 
 		#Procura por um utilizador com o username e password requisitados				
 		$sql = "SELECT userid FROM utilizador WHERE nome = '$user_name' AND password = '$pass_word';";
@@ -35,9 +38,13 @@
 		if ($userid === null)
 		{
 			echo("Utilizador e/ou Password incorretos");
+			# Faz rollback da transação
+			$conn->rollBack();
 		}
 		else
 		{
+			# Faz commit da transação
+			$conn->commit();	
 			echo("Login com sucesso");
 		}
 	

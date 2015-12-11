@@ -17,6 +17,9 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 	
+	# Inicia a transação
+	$connection->beginTransaction();
+	
 	#Procura pelo id do tipo requisitado		
 	$sql = "SELECT typecnt FROM tipo_registo WHERE nome = '$regname' ;";
 	$result = $connection->query($sql);
@@ -28,6 +31,9 @@
 	if ($regtype === null)
 	{
 		echo("<p>Tipo de Registo não encontrado<p>");
+		
+		# Faz rollback da transação
+		$connection->rollBack();
 	}
 	else
 	{
@@ -35,6 +41,10 @@
 		$sql = "UPDATE campo SET ativo=0 WHERE userid=$user_id AND nome='$pagename' AND typecnt=$regtype";
 		$connection->query($sql);
 		echo("<p>Campo retirado</p>\n");
+		
+		# Faz commit da transação
+		$connection->commit();
+		
 	}
 	
     $connection = null;

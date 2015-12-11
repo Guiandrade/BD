@@ -17,8 +17,14 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 
+	# Inicia a transação
+	$connection->beginTransaction();
+
 	$sql = "UPDATE tipo_registo SET ativo=0 WHERE userid=$user_id AND nome='$pagename'";
 	$connection->query($sql);
+	
+	# Faz commit da transação
+	$connection->commit();	
 	
     $connection = null;
 	echo("<p>Tipo de Registo apagado</p>\n");

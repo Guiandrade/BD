@@ -17,9 +17,15 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 	
+	# Inicia a transação
+	$connection->beginTransaction();	
+	
 	# Desativa a página, o que corresponde à sua eliminação
 	$sql = "UPDATE pagina SET ativa=0 WHERE userid=$user_id AND nome='$pagename'";
 	$connection->query($sql);
+		
+	# Faz commit da transação
+	$connection->commit();		
 		
     $connection = null;
 

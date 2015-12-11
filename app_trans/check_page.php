@@ -13,8 +13,11 @@
 	$user="ist178034";	// -> substituir pelo nome de utilizador
 	$password="sql";	// -> substituir pela password (dada pelo mysql_reset, ou atualizada pelo utilizador)
 	$dbname = "ist178034";	// a BD tem nome identico ao utilizador
-
+	
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+
+	# Inicia a transação
+	$connection->beginTransaction();
 
 	$sql = "SELECT * FROM pagina;";
 	$result = $connection->query($sql);
@@ -39,6 +42,9 @@
 		echo("</td></tr>\n");
 	}
 	echo("</table>\n");
+		
+	# Faz commit da transação
+	$connection->commit();			
 		
     $connection = null;
 ?>

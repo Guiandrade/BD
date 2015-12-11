@@ -27,6 +27,9 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 
+	# Inicia a transação
+	$connection->beginTransaction();
+
 	# Retorna o id da página pretendida
 	$sql = "SELECT pagecounter FROM pagina WHERE nome='$pagename' ;";
 	$result = $connection->query($sql);
@@ -39,6 +42,8 @@
 	if ($page_id === null)
 	{
 		echo("Página não existente");
+		# Faz rollback da transação
+		$connection->rollBack();	
 	}
 	else
 	{
@@ -68,6 +73,9 @@
 			echo("</td></tr>\n");
 		}
 		echo("</table>\n");
+		
+		# Faz commit da transação
+		$connection->commit();	
 	}
 
     $connection = null;

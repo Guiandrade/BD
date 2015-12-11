@@ -17,6 +17,9 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 
+	# Inicia a transação
+	$connection->beginTransaction();
+	
 	# Cria uma nova sequência
 	$sql = "INSERT INTO sequencia (userid ) VALUES ($user_id)";
 	$connection->query($sql);
@@ -47,7 +50,6 @@
 		$exists = $r['pagecounter'];		
 	}	
 	
-	echo("5");
 	# Se não existir nenhuma, pode criar uma nova
 	if ($exists === null)
 		{
@@ -55,15 +57,21 @@
 			$sql = "INSERT INTO pagina (userid, pagecounter, nome, idseq, ativa) VALUES ($user_id, $pagecounter, '$pagename',$seq_num, true)";
 			$connection->query($sql);
 
-    		$connection = null;	
+			# Faz commit da transação
+			$connection->commit();
+			
 			echo("<p>Página criada com sucesso</p>\n");
 		}
 		else
 		{
+			# Faz rollback da transação
+			$connection->rollBack();
+			
 			echo("O utilizador já tem essa página");
 			$result = null ;	
 		}
 
+		$connection = null;	
 ?>
 
 </br>

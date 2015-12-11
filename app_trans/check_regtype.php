@@ -16,6 +16,9 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 
+	# Inicia a transação
+	$connection->beginTransaction();
+
 	$sql = "SELECT * FROM tipo_registo;";
 	$result = $connection->query($sql);
 	$num = $result->rowCount();
@@ -40,7 +43,10 @@
 	}
 	echo("</table>\n");
 		
-        $connection = null;
+	# Faz commit da transação
+	$connection->commit();		
+		
+    $connection = null;
 ?>
 <A name="bottom">
 <A href="menu.html" onclick="location.href=this.href+'?'+scrt_var;return false;" >Retroceder</A>

@@ -17,6 +17,9 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 
+	# Inicia a transação
+	$connection->beginTransaction();
+	
 	# Cria uma nova sequência
 	$sql = "INSERT INTO sequencia (userid) VALUES ($user_id)";
 	$connection->exec($sql);
@@ -41,6 +44,9 @@
 	# Cria o novo tipo
 	$sql = "INSERT INTO tipo_registo (userid, typecnt, nome, ativo, idseq ) VALUES ($user_id, $type_cnt, '$nome', true, $seq_num)";
 	$connection->exec($sql);
+	
+	# Faz commit da transação
+	$connection->commit();
 	
     $connection = null;
 	echo("<p>Novo tipo criado com sucesso</p>\n");

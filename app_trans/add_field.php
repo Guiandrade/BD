@@ -18,6 +18,9 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 
+	# Inicia a transação
+	$connection->beginTransaction();
+
 	# Cria uma nova sequência
 	$sql = "INSERT INTO sequencia (userid ) VALUES ($user_id)";
 	$connection->query($sql);
@@ -50,6 +53,9 @@
 	# Insere o novo campo
 	$sql = "INSERT INTO campo (userid, typecnt, campocnt, idseq, ativo, nome) VALUES ($user_id, $type_r, $cmpcnt, $seq_num, true, '$fieldname')";
 	$connection->query($sql);
+	
+	# Faz commit da transação
+	$connection->commit();
 	
     $connection = null;
 	echo("<p>Campo inserido com sucesso</p>\n");

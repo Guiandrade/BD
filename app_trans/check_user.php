@@ -16,6 +16,9 @@
 
 	$connection = new PDO("mysql:host=" . $host. ";dbname=" . $dbname, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 
+	# Inicia a transação
+	$connection->beginTransaction();
+
 	$sql = "SELECT * FROM utilizador;";
 	$result = $connection->query($sql);
 	$num = $result->rowCount();
@@ -36,7 +39,10 @@
 	}
 	echo("</table>\n");
 		
-        $connection = null;
+	# Faz commit da transação
+	$connection->commit();		
+		
+    $connection = null;
 
 ?>
 <A NAME="bottom">

@@ -47,7 +47,6 @@
 		$exists = $r['pagecounter'];		
 	}	
 	
-	echo("5");
 	# Se não existir nenhuma, pode criar uma nova
 	if ($exists === null)
 		{

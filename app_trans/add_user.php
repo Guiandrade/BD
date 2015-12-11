@@ -26,6 +26,9 @@ try {
 	    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 	    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
+		# Inicia a transação
+		$conn->beginTransaction();
+		
 		#Procura por um utilizador com o username requisitado para ver se não existe já algum com esse nome		
 		$sql = "SELECT userid FROM utilizador WHERE nome = '$user_name' OR email='$e_mail' ;";
 		$result = $conn->query($sql);
@@ -49,9 +52,16 @@ try {
 			{
 				$userid = $r['userid'];		
 			}
+			
+			# Faz commit da transação
+			$conn->commit();
+			
 		}
 		else
 		{
+			# Faz rollback da transação
+			$conn->rollBack();	
+			
 			echo("Utilizador ou email já existente");
 			$userid = null ;	
 		}
