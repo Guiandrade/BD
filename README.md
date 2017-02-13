@@ -1,3 +1,3 @@
 # Database Course Project
 
-Projecto de BD (1º Semestre 2015)
+Project made on the 1º Semester of 2015.
